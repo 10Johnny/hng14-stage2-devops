@@ -59,3 +59,8 @@
 - Problem: No health endpoint existed.
 - Change made: Added `GET /health`.
 - Why: Needed for container health checks.
+## Fix 11
+- File: frontend/views/index.html
+- Problem: The UI assumed every `/submit` response contained `job_id`, so failed submissions displayed `Submitted: undefined`.
+- Change made: Added response validation and error handling before displaying the submitted job ID.
+- Why: Prevents misleading UI output and makes frontend failures visible during debugging.
