@@ -6,3 +6,8 @@ node_modules/
 coverage/
 dist/
 build/
+api/venv/
+worker/venv/
+api/.pytest_cache/
+api/__pycache__/
+worker/__pycache__/
