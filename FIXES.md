@@ -102,3 +102,14 @@
 - Problem: The application had no orchestration file to run the full stack together in containers.
 - Change made: Added a Docker Compose file defining frontend, API, worker, and Redis with a named network, health-based dependencies, environment-driven configuration, and resource limits.
 - Why: Required to run the stack consistently and meet the Stage 2 containerization requirements.
+## Fix 19
+- File: api/tests/test_main.py
+- Problem: The project had no unit tests for the API.
+- Change made: Added unit tests for the health endpoint, job creation, and job status retrieval with Redis mocked.
+- Why: Required for the Stage 2 test pipeline and to validate API behavior in isolation.
+
+## Fix 20
+- File: api/tests/test_main.py
+- Problem: Pytest could not import `main` during test collection.
+- Change made: Added the parent API directory to `sys.path` before importing `main`.
+- Why: Ensures the tests can import the FastAPI app module correctly when run with pytest.
