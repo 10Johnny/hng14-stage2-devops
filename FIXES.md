@@ -113,3 +113,26 @@
 - Problem: Pytest could not import `main` during test collection.
 - Change made: Added the parent API directory to `sys.path` before importing `main`.
 - Why: Ensures the tests can import the FastAPI app module correctly when run with pytest.
+## Fix 21
+- File: .gitignore
+- Problem: The API virtual environment was accidentally committed into the repository.
+- Change made: Added virtual environment and cache paths to `.gitignore` and removed the tracked venv from Git.
+- Why: Virtual environments are machine-specific and should never be committed.
+
+## Fix 22
+- File: .flake8
+- Problem: The project had no Python lint configuration.
+- Change made: Added a Flake8 configuration file for local and CI linting.
+- Why: Required for the Stage 2 lint step.
+
+## Fix 23
+- File: frontend/.eslintrc.json
+- Problem: The frontend had no JavaScript lint configuration.
+- Change made: Added an ESLint configuration file for Node.js code.
+- Why: Required for the Stage 2 lint step.
+
+## Fix 24
+- File: frontend/.eslintignore
+- Problem: The frontend had no ESLint ignore rules.
+- Change made: Added `node_modules` to the ESLint ignore file.
+- Why: Prevents linting installed packages.
