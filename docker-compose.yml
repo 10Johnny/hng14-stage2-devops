@@ -1,0 +1,72 @@
+services:
+  redis:
+    image: redis:7-alpine
+    networks:
+      - stage2-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    cpus: "0.50"
+    mem_limit: "128m"
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      QUEUE_NAME: ${QUEUE_NAME:-job}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - stage2-network
+    expose:
+      - "8000"
+    restart: unless-stopped
+    cpus: "0.50"
+    mem_limit: "256m"
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      QUEUE_NAME: ${QUEUE_NAME:-job}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - stage2-network
+    restart: unless-stopped
+    cpus: "0.50"
+    mem_limit: "256m"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      API_URL: ${API_URL:-http://api:8000}
+      FRONTEND_PORT: ${FRONTEND_PORT:-3000}
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - stage2-network
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    restart: unless-stopped
+    cpus: "0.50"
+    mem_limit: "256m"
+
+networks:
+  stage2-network:
+    driver: bridge

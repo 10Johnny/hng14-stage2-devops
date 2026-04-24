@@ -64,3 +64,41 @@
 - Problem: The UI assumed every `/submit` response contained `job_id`, so failed submissions displayed `Submitted: undefined`.
 - Change made: Added response validation and error handling before displaying the submitted job ID.
 - Why: Prevents misleading UI output and makes frontend failures visible during debugging.
+## Fix 12
+- File: api/Dockerfile
+- Problem: The API service had no container build definition for production use.
+- Change made: Added a production-ready Dockerfile with a non-root user and a health check.
+- Why: Required to containerize the API safely and make it suitable for orchestration.
+## Fix 13
+- File: worker/Dockerfile
+- Problem: The worker service had no container build definition for production use.
+- Change made: Added a production-ready Dockerfile with a non-root user and a health check.
+- Why: Required to containerize the worker safely and make it suitable for orchestration.
+## Fix 14
+- File: frontend/Dockerfile
+- Problem: The frontend service had no container build definition for production use.
+- Change made: Added a production-ready Dockerfile with a non-root user and a health check.
+- Why: Required to containerize the frontend safely and make it suitable for orchestration.
+## Fix 15
+- File: api/.dockerignore
+- Problem: Local virtual environment and cache files could be copied into the API image during Docker build.
+- Change made: Added a `.dockerignore` file to exclude venv, cache, and local environment files.
+- Why: Keeps the image clean and avoids copying unnecessary local files.
+
+## Fix 16
+- File: worker/.dockerignore
+- Problem: Local virtual environment and cache files could be copied into the worker image during Docker build.
+- Change made: Added a `.dockerignore` file to exclude venv, cache, and local environment files.
+- Why: Keeps the image clean and avoids copying unnecessary local files.
+
+## Fix 17
+- File: frontend/.dockerignore
+- Problem: Local `node_modules` and local environment files could be copied into the frontend image during Docker build.
+- Change made: Added a `.dockerignore` file to exclude `node_modules`, logs, and local environment files.
+- Why: Prevents bloated images and avoids copying machine-specific files.
+
+## Fix 18
+- File: docker-compose.yml
+- Problem: The application had no orchestration file to run the full stack together in containers.
+- Change made: Added a Docker Compose file defining frontend, API, worker, and Redis with a named network, health-based dependencies, environment-driven configuration, and resource limits.
+- Why: Required to run the stack consistently and meet the Stage 2 containerization requirements.
